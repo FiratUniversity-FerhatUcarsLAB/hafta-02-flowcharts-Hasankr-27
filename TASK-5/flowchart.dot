@@ -1,0 +1,83 @@
+digraph SmartHomeSecurity {
+// Grafik Ayarları
+rankdir=TB;
+node [shape=box, style="filled, rounded", fillcolor="#E0F7FA", fontname="Inter"];
+edge [fontname="Inter"];
+
+// Başlangıç ve Ana Döngü
+START [label="Başlangıç", shape=Mdiamond, fillcolor="#81C784"];
+SISTEM_KONTROL [label="Sistem Aktif Mi?", shape=diamond, fillcolor="#FFCC80"];
+SENSOR_OKU [label="Tüm Sensörleri Oku (Sürekli Döngü)", fillcolor="#B3E5FC"];
+TEHDIT_VAR_MI [label="Hareket VEYA Kapı/Pencere Açık Mı?", shape=diamond, fillcolor="#FFCC80"];
+
+// Yanlış Alarm/Seviye Belirleme
+SEVIYE_BELIRLE [label="Tehdit Seviyesi Belirle (1, 2, 3)", fillcolor="#B3E5FC"];
+YANLIS_ALARM [label="Ev Sahibi Evde Mi? VEYA Seviye 3 Mü?", shape=diamond, fillcolor="#FFCC80"];
+
+// Aksiyonlar
+KAMERA_AKTIF [label="Kamera Aktivasyonu", fillcolor="#4DD0E1"];
+ALARM_EKLENMIS [label="Alarm Seviyesine Göre Eylem (Siren/Uyarı)", fillcolor="#4DD0E1"];
+BILDIRIM_GONDER [label="Bildirim Gönder (SMS + App + Email)", fillcolor="#4DD0E1"];
+DUSUK_UYARI [label="Düşük Seviye Bildirimi (App)", fillcolor="#4DD0E1"];
+BEKLE_SIFIRLA_KONTROL [label="60sn Bekle (Kullanıcıdan Sıfırlama Komutu Bekle)", fillcolor="#FFE0B2"];
+
+// Alarm Devam Döngüsü
+ALARM_DEVAM [label="Alarm Sıfırlama Komutu Geldi Mi?", shape=diamond, fillcolor="#FFCC80"];
+TEKRAR_KONTROL [label="Bekle ve Tekrar Kontrol Et (5sn)", fillcolor="#FFE0B2"];
+
+// Çıkış ve Bekleme
+SIFIRLA [label="Alarm Sıfırlandı", shape=box, fillcolor="#E0E0E0"];
+KISA_BEKLE [label="Kısa Bekle (1sn)", fillcolor="#F0F4C3"];
+
+// Akış Bağlantıları
+
+// 1. Ana Döngü Girişi
+START -> SISTEM_KONTROL;
+
+// 2. Sistem Kontrolü
+SISTEM_KONTROL -> KISA_BEKLE [label="HAYIR (Devre Dışı)"];
+KISA_BEKLE -> SISTEM_KONTROL [label="Sürekli", arrowhead=normal, style=bold, color="#388E3C"]; // Geri Ok
+
+SISTEM_KONTROL -> SENSOR_OKU [label="EVET (Aktif)", style=bold];
+SENSOR_OKU -> TEHDIT_VAR_MI [label="Sensörler Okundu"];
+
+// 3. Tehdit Kontrolü
+TEHDIT_VAR_MI -> KISA_BEKLE [label="HAYIR (Güvenli)"];
+TEHDIT_VAR_MI -> SEVIYE_BELIRLE [label="EVET (Tehdit Algılandı)", style=bold];
+
+// 4. Seviye ve Yanlış Alarm Kontrolü
+SEVIYE_BELIRLE -> YANLIS_ALARM;
+
+// Yanlış Alarm Senaryosu
+YANLIS_ALARM -> DUSUK_UYARI [label="EVET (Ev Sahibi Evde & Seviye < 3)", color="#FBC02D"];
+DUSUK_UYARI -> BEKLE_SIFIRLA_KONTROL;
+BEKLE_SIFIRLA_KONTROL -> SIFIRLA [label="Sıfırla Komutu Geldi"];
+BEKLE_SIFIRLA_KONTROL -> KAMERA_AKTIF [label="Devam Komutu VEYA Timeout", style=bold];
+
+// Tehdit Onayı Senaryosu
+YANLIS_ALARM -> KAMERA_AKTIF [label="HAYIR (Tehdit Onaylandı VEYA Seviye 3)", style=bold, color="#D32F2F"];
+
+// 5. Alarm Tetikleme
+KAMERA_AKTIF -> ALARM_EKLENMIS;
+ALARM_EKLENMIS -> BILDIRIM_GONDER;
+BILDIRIM_GONDER -> ALARM_DEVAM;
+
+// 6. Alarm Devam/Sıfırlama Döngüsü
+ALARM_DEVAM -> SIFIRLA [label="EVET (Sıfırla Komutu)"];
+ALARM_DEVAM -> TEKRAR_KONTROL [label="HAYIR (Devam Ediyor)"];
+
+// Döngü Geri Oku (Alarm Tekrar Kontrolü)
+TEKRAR_KONTROL -> ALARM_EKLENMIS [label="Tehdit Durumu Tekrar Kontrol Ediliyor", arrowhead=normal, style=dashed];
+
+// Sıfırlamadan Ana Akışa Dönüş
+SIFIRLA -> SISTEM_KONTROL [label="Reset"]; // Sistem sıfırlandıktan sonra başa döner.
+
+// Açıklamalar
+subgraph cluster_legend {
+    label = "Durum Açıklamaları";
+    style = "rounded";
+    node [shape=note, fillcolor="#F3E5F5"];
+    aciklama1 [label="Seviye 3: Siren, SMS, App, Email (Acil)\nSeviye 2: App, Email (Orta)\nSeviye 1: App (Düşük)"];
+}
+
+}
