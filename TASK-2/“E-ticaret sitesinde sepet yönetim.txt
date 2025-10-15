@@ -1,0 +1,122 @@
+“E-ticaret sitesinde sepet y¨onetimi ve ¨odeme sistemini adım adım a¸cıkla.
+
+Kullanıcı giri¸si, ¨ur¨un ekleme, stok kontrol¨u, indirim kodu, kargo hesaplama
+
+ve ¨odeme a¸samalarını i¸cermeli.
+
+
+
+
+Düşünme sürecini göster
+E-ticaret sitesinde sepet yönetimi ve ödeme sistemini adım adım aşağıdaki şekilde açıklayabiliriz:
+
+I. Sepet Yönetimi Aşamaları
+Sepet yönetimi, kullanıcının ürünleri seçmesinden ödeme aşamasına geçene kadar olan tüm süreci kapsar.
+
+1. Kullanıcı Girişi/Oturumu
+Ziyaretçi Sepeti: Siteye giriş yapmamış (misafir) kullanıcılar için bir sepet oluşturulur (genellikle çerezler veya oturum bilgileri ile).
+
+Kayıtlı Kullanıcı Girişi: Kullanıcı hesabına giriş yaptığında, daha önce sepete eklediği ancak satın almadığı ürünler (varsa) mevcut sepetle birleştirilir veya güncellenir. Bu, kullanıcının deneyimini kişiselleştirir.
+
+2. Ürün Ekleme ve Sepet Görünümü
+Ürün Ekleme: Kullanıcı, beğendiği ürünün detay sayfasında istediği adedi belirleyerek "Sepete Ekle" butonuna tıklar.
+
+Stok Kontrolü (Anlık): Ürün sepete eklenirken, o ürünün istenen adette stokta olup olmadığı anlık olarak kontrol edilir. Yetersiz stok durumunda kullanıcı bilgilendirilir.
+
+Sepet Özeti: Kullanıcıya, sepetteki ürünlerin adı, adedi, birim fiyatı ve toplam fiyatı gösterilir. Bu aşamada ürün adedi değiştirilebilir veya ürün sepetten çıkarılabilir.
+
+3. Sepet Güncelleme ve Doğrulama
+Stok Kontrolü (Güncel): Kullanıcı ödeme aşamasına geçmeden veya sepeti her güncellediğinde, ürünlerin stok durumu ve fiyatları tekrar kontrol edilir.
+
+İndirim Kodu/Kupon Kullanımı: Kullanıcının sahip olduğu indirim kodunu/kuponu girebileceği bir alan bulunur. Kod girildiğinde sistem, kodun geçerliliğini (şartlara uygunluk, son kullanma tarihi vb.) kontrol eder ve geçerliyse toplam fiyattan ilgili indirimi düşer.
+
+Kargo Hesaplama (Ön Tahmin): Bu aşamada, kullanıcının konum bilgisine veya varsayılan bir konuma göre tahmini kargo ücreti veya ücretsiz kargo alt limiti gösterilebilir.
+
+II. Ödeme Aşamasına Geçiş
+Kullanıcı "Sepeti Onayla" veya "Ödemeye Geç" butonuna tıklar.
+
+4. Adres ve Kargo Seçimi
+Fatura/Teslimat Adresi: Kullanıcı kayıtlı adreslerinden birini seçer veya yeni bir adres girer.
+
+Kargo Yöntemi Seçimi: Site, belirlenen adres için geçerli olan kargo firmalarını ve teslimat seçeneklerini (standart, hızlı kargo vb.) sunar. Kullanıcının seçimine göre kesin Kargo Hesaplama yapılır ve toplam tutara eklenir.
+
+5. Ödeme Yöntemi Seçimi
+Kullanıcı, e-ticaret sitesinin sunduğu ödeme yöntemlerinden birini seçer:
+
+Kredi/Banka Kartı (Sanal POS ile)
+
+Havale/EFT
+
+Kapıda Ödeme (Varsa)
+
+Dijital Cüzdanlar (Varsa)
+
+6. Ödeme İşlemi ve Güvenlik
+Kredi/Banka Kartı İle Ödeme:
+
+Kullanıcı kart bilgilerini (Numara, Son Kullanma Tarihi, CVV) girer.
+
+Sistem, bu bilgileri SSL şifrelemesi ile (güvenlik için zorunludur) Sanal POS hizmeti sağlayan ödeme kuruluşu/bankaya iletir.
+
+Çoğu durumda, güvenlik için 3D Secure (SMS ile onay kodu) yönlendirmesi yapılır. Kullanıcı, bankasının gönderdiği kodu girerek işlemi onaylar.
+
+Havale/EFT: Kullanıcıya ödeme yapması gereken banka hesap bilgileri (IBAN, alıcı adı vb.) ve toplam tutar gösterilir. Sipariş, ödeme onayı gelene kadar "beklemede" kalır.
+
+7. Sipariş Onayı ve Bilgilendirme
+Başarılı Ödeme: Ödeme işlemi tamamlandığında (Sanal POS'tan onay geldiğinde veya Havale/EFT'nin hesaba geçtiği teyit edildiğinde), kullanıcıya "Siparişiniz Alınmıştır" ekranı gösterilir.
+
+Stok Güncelleme: Satın alınan ürünler, anlık olarak stoktan düşülür.
+
+E-posta/SMS Bilgilendirmesi: Kullanıcıya, sipariş detaylarını içeren bir onay e-postası ve/veya SMS gönderilir.
+
+Bu adımlar, bir e-ticaret sitesindeki standart ve güvenli bir sepet yönetimi ile ödeme sürecini oluşturur.
+
+
+
+
+
+
+
+Bu sistemi pseudocode olarak yaz. D¨ong¨uler i¸cin DONG ¨ U, ko¸sullar i¸cin ¨
+
+EGER- ˘ ˙
+
+ISE kullan. Her adımı BAS¸LA ile ba¸slat, B˙
+
+IT˙
+
+IR ile bitir. T¨um
+
+kontrol noktalarını belirt
+
+
+
+Elbette, e-ticaret sepet yönetimi ve ödeme sistemini anlatan adımları pseudocode (sözde kod) olarak, belirtilen format ve anahtar kelimelerle yazıyorum.
+omple birleştir
+
+
+Elbette, e-ticaret sepet yönetimi ve ödeme sistemini anlatan tüm adımları tek bir akış halinde (pseudocode) birleştiriyorum.
+misafir kullanıcı ve mevcut sepet kısmını atlamışsın
+
+
+Haklısınız. Kullanıcı girişi ve mevcut sepet yönetimi ile ilgili ilk adımı daha detaylı ve açık bir şekilde akışa dahil etmem gerekiyordu.
+
+İşte düzeltilmiş ve misafir/kayıtlı kullanıcı sepet yönetimini içeren, tek bir akış halinde birleştirilmiş (pseudocode) versiyon:
+tamamdır şimdi bunu Pseudocode’u Graphviz DOT formatına ¸cevir. rankdir=TB kullan. Karar
+
+noktalarında EVET/HAYIR etiketlerini unutma.
+
+
+Elbette, yukarıdaki birleştirilmiş pseudocode akışını, adımları ve karar noktalarını (koşullar ve döngüler) gösteren bir akış şeması (flowchart) olarak Graphviz DOT formatına çeviriyorum.
+
+Bu çevrimde rankdir=TB (yukarıdan aşağıya akış) kullanılacaktır ve karar noktaları için elmas şekli (diamond) ile EVET/HAYIR etiketleri kullanılacaktır. İşlem adımları dikdörtgen (box), başlangıç/bitiş noktaları oval (oval) olarak temsil edilecektir.
+bu çok karmaşık daha düzenli çevirir misin
+
+
+Elbette, akış şemasını daha az karmaşık ve görsel olarak daha düzenli hale getirmek için adımları gruplayarak ve bağlantıları sadeleştirerek yeniden düzenleyebilirim.
+
+Aşağıdaki Graphviz DOT kodu, ana süreç adımlarını (Sepet Yönetimi, Ödeme Öncesi Hesaplamalar, Ödeme İşlemi) daha belirgin bloklara ayırır.
+ok işaretleri falan çok karışık gözüküyor onlar için ayrı bir düzenleme yapabilir misin
+
+
+Elbette, ok işaretlerinin (bağlantıların) karışıklığını azaltmak ve akış şemasını görsel olarak daha net hale getirmek için birkaç düzenleme yapacağım. Özellikle çoklu çıkış noktalarına sahip düğümleri (örneğin döngü ve karar noktaları) daha düzgün hizalayacağım ve akışı daha doğrusal tutmaya çalışacağım.
