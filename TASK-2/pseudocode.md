@@ -1,0 +1,125 @@
+BASLA E_TICARET_ISLEMI_AKISI
+
+    // 1. KULLANICI GİRİŞİ, OTURUM VE SEPET YÖNETİMİ
+    BASLA KULLANICI_VE_SEPET_TANIMA
+        KULLANICI_ID = KULLANICI_OTURUM_BILGISI_AL()
+        OTURUM_ID = SESSION_ID_AL()
+        MISAFIR_SEPETI = TEOORIK_SEPETI_GETIR(OTURUM_ID)
+
+        EGER KULLANICI_ID MEVCUT_ISE
+            // KAYITLI KULLANICI: Misafir sepeti ile veritabanındaki sepeti birleştir
+            KAYITLI_SEPET = VERITABANINDAN_SEPETI_GETIR(KULLANICI_ID)
+            OTURUM_SEPETI = SEPETLERI_BIRLESTIR(KAYITLI_SEPET, MISAFIR_SEPETI)
+            VERITABANINDA_SEPETI_KAYDET(KULLANICI_ID, OTURUM_SEPETI)
+        DEGILSE
+            // MİSAFİR KULLANICI: Sadece oturum sepetini kullan
+            OTURUM_SEPETI = MISAFIR_SEPETI
+        BITIR_EGER
+
+        KONTROL_NOKTASI: Kullanıcı Tipi Belirlendi ve Sepet Birleştirildi/Tanımlandı
+    BITIR KULLANICI_VE_SEPET_TANIMA
+
+
+    // 2. ÜRÜN EKLEME VE STOK KONTROLÜ
+    DONGU KULLANICI_ALISVERISE_DEVAM_ETTIGI_SURECE
+        EGER KULLANICI_URUN_EKLEMEK_ISTIYOR_ISE
+            URUN_ID = KULLANICIDAN_ALINAN_URUN_ID
+            EKLEME_MIKTARI = KULLANICIDAN_ALINAN_ADET
+            GERCEK_STOK = VERITABANINDAN_STOK_KONTROL(URUN_ID)
+
+            EGER EKLEME_MIKTARI > GERCEK_STOK ISE
+                MESAJ_GOSTER("Hata: İstenen miktar stokta yok. Mevcut: " + GERCEK_STOK)
+            DEGILSE
+                OTURUM_SEPETI.URUN_EKLE(URUN_ID, EKLEME_MIKTARI)
+            BITIR_EGER
+            KONTROL_NOKTASI: Ürün Sepete Eklendi ve Stok Yeterliliği Kontrol Edildi
+        BITIR_EGER
+    BITIR_DONGU
+
+
+    // 3. SEPET GÜNCELLEME, İNDİRİM VE ÖN KARGO HESAPLAMA
+    BASLA SEPET_KONTROL_VE_INDIRIM_UYGULAMA
+        TOPLAM_TUTAR = 0
+        DONGU HER_BIR_URUN OTURUM_SEPETI_ICINDE
+            GUNCEL_STOK = VERITABANINDAN_STOK_KONTROL(URUN.ID)
+            EGER URUN.ADET > GUNCEL_STOK VEYA URUN.FIYAT != VERITABANI_FIYATI(URUN.ID) ISE
+                // Stok veya fiyat değişikliği durumunda sepeti güncelle
+                OTURUM_SEPETI.URUN_ADET_GUNCELLE(URUN.ID, GUNCEL_STOK)
+                MESAJ_GOSTER("Uyarı: " + URUN.AD + " ürününde stok/fiyat güncellendi.")
+            BITIR_EGER
+            TOPLAM_TUTAR = TOPLAM_TUTAR + (URUN.GUNCEL_FIYAT * URUN.ADET)
+        BITIR_DONGU
+        
+        // İndirim Kodu Uygulama
+        INDIRIM_KODU = KULLANICIDAN_ALINAN_KOD
+        EGER INDIRIM_KODU MEVCUT_ISE
+            EGER INDIRIM_KODU_GECERLILIK_KONTROLU(INDIRIM_KODU, TOPLAM_TUTAR) ISE
+                INDIRIM_MİKTARI = INDIRIMI_HESAPLA(INDIRIM_KODU, TOPLAM_TUTAR)
+                ARA_TOPLAM = TOPLAM_TUTAR - INDIRIM_MİKTARI
+            DEGILSE
+                ARA_TOPLAM = TOPLAM_TUTAR
+            BITIR_EGER
+        DEGILSE
+            ARA_TOPLAM = TOPLAM_TUTAR
+        BITIR_EGER
+        
+        KULLANICIYA_GOSTER("Ara Toplam: " + ARA_TOPLAM)
+        KONTROL_NOKTASI: Stok/Fiyat Doğrulama ve İndirim Uygulama Tamamlandı
+    BITIR SEPET_KONTROL_VE_INDIRIM_UYGULAMA
+
+
+    // 4. ADRES VE KARGO SEÇİMİ (KESİN HESAPLAMA)
+    BASLA ADRES_VE_KARGO_BILGILERI
+        EGER KULLANICI_ID YOK_VE_ODEMEYE_GECILIYOR_ISE
+            MISAFIR_KULLANICI_BILGILERI_AL() // İsim, soyisim, e-posta vb.
+        BITIR_EGER
+        
+        TESLIMAT_ADRESI = KULLANICIDAN_ADRES_SECIYI_AL()
+        KARGO_YONTEMI_SECILDI = KULLANICIDAN_KARGO_YONTEMI_AL(TESLIMAT_ADRESI)
+        
+        // Kesin Kargo Ücreti
+        KARGO_UCRETI = KARGO_FIRMASINDAN_UCRET_HESAPLA(TESLIMAT_ADRESI, KARGO_YONTEMI_SECILDI, SEPET_AGIRLIGI)
+        
+        SON_TUTAR = ARA_TOPLAM + KARGO_UCRETI
+        KULLANICIYA_GOSTER("Kesin Kargo Ücreti: " + KARGO_UCRETI + " | Toplam Ödenecek Tutar: " + SON_TUTAR)
+        
+        KONTROL_NOKTASI: Kargo Ücreti ve Son Tutar Hesaplama Yapıldı
+    BITIR ADRES_VE_KARGO_BILGILERI
+
+
+    // 5. ÖDEME İŞLEMLERİ
+    BASLA ODEME_ISLEMI
+        ODEME_YONTEMI = KULLANICIDAN_ODEME_YONTEMI_AL()
+
+        EGER ODEME_YONTEMI == "KREDI_KARTI" ISE
+            KART_BILGILERI = KULLANICIDAN_KART_BILGISI_AL()
+            ODEME_SONUCU = SANAL_POS_ISLEMI_BASLAT(KART_BILGILERI, SON_TUTAR)
+            
+            EGER ODEME_SONUCU == "3D_SECURE_GEREKLI" ISE
+                // Güvenlik: Banka/Ödeme Kurumu Yönlendirmesi
+                ODEME_SONUCU = SANAL_POS_ISLEMI_TAMAMLA_3D()
+            BITIR_EGER
+
+        EGER ODEME_YONTEMI == "HAVALE_EFT" ISE
+            SIPARIS_DURUMU = "ODEME_BEKLIYOR"
+            MESAJ_GOSTER("Lütfen " + SON_TUTAR + " TL tutarı belirtilen IBAN'a gönderin.")
+            GIT_SIPARIS_OZET_SAYFASI
+            CIK
+        BITIR_EGER
+
+        // Sonuç Kontrolü
+        EGER ODEME_SONUCU == "BASARILI" ISE
+            SIPARIS_DURUMU = "ONAYLANDI"
+            STOK_GONDERILEN_URUNLERI_DUSUR(OTURUM_SEPETI) // ÖNEMLİ: Kesin Stok Düşümü
+            SEPETI_TEMIZLE(OTURUM_ID, KULLANICI_ID)
+            EPOSTA_GONDER(KULLANICI_ID, "Sipariş Onayı")
+            MESAJ_GOSTER("Ödeme başarılı, siparişiniz alınmıştır.")
+        DEGILSE
+            SIPARIS_DURUMU = "ODEME_HATASI"
+            MESAJ_GOSTER("Hata: Ödeme işlemi başarısız oldu. Lütfen tekrar deneyin.")
+        BITIR_EGER
+
+        KONTROL_NOKTASI: Ödeme İşlemi Başarısı ve Kesin Stok Düşümü Yapıldı
+    BITIR ODEME_ISLEMI
+
+BITIR E_TICARET_ISLEMI_AKISI
