@@ -1,3 +1,4 @@
-
-
+İsim-Soy isim:Hasan Kara
+Öğrenci No:250541015
 sistemin kısa açıklaması (maks. 5-6 satır)
+Bu IoT tabanlı Akıllı Ev Güvenlik Sistemi sürekli bir döngüde çalışır ve öncelikle sistemin aktif olup olmadığını kontrol eder. Aktifse, sensörlerden (hareket, kapı/pencere) gelen verileri okuyarak tehdit seviyesini (Düşük, Orta, Yüksek) belirler. Düşük veya Orta seviyeli bir tehdit algılandığında, bir yanlış alarm kontrolü yapılır (ev sahibinin evde olup olmadığına bakılarak) ve kullanıcıya 60 saniyelik bir onay süresi tanınır. Onay alınmaz veya Yüksek Seviyeli bir tehdit algılanırsa, sistem kamerayı aktive eder, belirlenen seviyeye göre sesli alarmı çalar ve kullanıcıya SMS, uygulama ve e-posta yoluyla anında bildirim gönderir. Alarm tetiklendikten sonra sistem, kullanıcıdan bir sıfırlama komutu gelene kadar durumu kontrol etmeye devam eder ve sonrasında ana döngüye döner.
