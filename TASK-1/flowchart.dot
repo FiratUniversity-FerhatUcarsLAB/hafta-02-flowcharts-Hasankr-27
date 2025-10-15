@@ -1,0 +1,93 @@
+digraph ATM_Para_Cekme_Akis_Diyagrami {
+    // Düğüm (Node) Şekillerinin Tanımlanması
+    node [shape=box];
+    
+    // Başlangıç ve Bitiş Düğümü
+    Basla [shape=oval, label="BAŞLA"];
+    Son [shape=oval, label="SON"];
+
+    // Girdi/Çıktı Düğümü (Parallelogram)
+    Kart_Tak [shape=parallelogram, label="YAZ: Kartınızı Takın"];
+    PIN_Giris [shape=parallelogram, label="YAZ: PIN Girin\nOKU: girilen_PIN"];
+    Hata_PIN [shape=parallelogram, label="YAZ: Hatalı PIN / Kalan Hak"];
+    Kart_Bloke [shape=parallelogram, label="YAZ: Kart Bloke"];
+    Miktar_Giris [shape=parallelogram, label="YAZ: Tutar Girin\nOKU: çekim_tutarı"];
+    Yetersiz_Bakiye [shape=parallelogram, label="YAZ: Yetersiz Bakiye"];
+    Limit_Asildi [shape=parallelogram, label="YAZ: Günlük Limit Aşıldı"];
+    Gecersiz_Tutar [shape=parallelogram, label="YAZ: Geçersiz Tutar (Katları)"];
+    Para_Ver [shape=parallelogram, label="YAZ: Para ve Kartı Alın"];
+    Tekrar_Soru [shape=parallelogram, label="YAZ: Başka İşlem? (E/H)\nOKU: tekrar_cevap"];
+    Iyi_Gunler [shape=parallelogram, label="YAZ: İyi Günler. İşlem Sonlandı"];
+
+    // Karar Düğümü (Diamond)
+    PIN_Dogru_mu [shape=diamond, label="girilen_PIN == doğru_PIN?"];
+    Hak_Var_mi [shape=diamond, label="pin_giriş_deneme < 3?"];
+    Tutar_Gecerli_mi [shape=diamond, label="Tutar % 20 == 0 VE Tutar >= 20?"];
+    Limit_Yeterli_mi [shape=diamond, label="toplam_çekim <= GÜNLÜK_LIMIT?"];
+    Bakiye_Yeterli_mi [shape=diamond, label="çekim_tutarı <= mevcut_bakiye?"];
+    Tekrar_Et [shape=diamond, label="işlem_tekrar == DOĞRU?"];
+    Tekrar_Cevap [shape=diamond, label="tekrar_cevap == 'H'?"];
+
+    // İşlem Düğümü (Box)
+    Pin_Deneme_Arttir [label="pin_giriş_deneme++"];
+    Pin_Dogrulandi [label="pin_doğrulandı = DOĞRU"];
+    Para_Cek_Guncelle [label="mevcut_bakiye -= çekim_tutarı\ngünlük_çekilen_tutar += çekim_tutarı\nYAZ: Bakiye, Limit"];
+
+    // Blok Sonlandırma
+    Pin_Basarisiz [label="YAZ: PIN Başarısız"];
+
+    // --- Akış Bağlantıları ---
+
+    // Ana Döngü Başlangıcı
+    Basla -> Tekrar_Et;
+
+    // Tekrar Döngüsü Kontrolü
+    Tekrar_Et -> Kart_Tak [label="EVET"];
+    Tekrar_Et -> Iyi_Gunler [label="HAYIR"];
+
+    // PIN Doğrulama Akışı (İç Döngü)
+    Kart_Tak -> Hak_Var_mi;
+
+    Hak_Var_mi -> PIN_Giris [label="EVET"];
+    Hak_Var_mi -> Kart_Bloke [label="HAYIR"];
+    Kart_Bloke -> Pin_Basarisiz; // PIN hatasından dolayı işlemi sonlandırma bloğuna gider
+
+    PIN_Giris -> PIN_Dogru_mu;
+
+    PIN_Dogru_mu -> Pin_Dogrulandi [label="EVET"];
+    Pin_Dogrulandi -> Miktar_Giris; // PIN başarılı, ana işleme geç
+
+    PIN_Dogru_mu -> Pin_Deneme_Arttir [label="HAYIR"];
+    Pin_Deneme_Arttir -> Hata_PIN;
+    Hata_PIN -> Hak_Var_mi; // Tekrar deneme hakkı kontrolüne geri dön
+
+    // PIN Başarısız Olursa
+    Pin_Basarisiz -> Tekrar_Soru;
+
+    // Para Çekme Kontrolleri Akışı
+    Miktar_Giris -> Tutar_Gecerli_mi;
+
+    Tutar_Gecerli_mi -> Limit_Yeterli_mi [label="EVET"];
+    Tutar_Gecerli_mi -> Gecersiz_Tutar [label="HAYIR"];
+    Gecersiz_Tutar -> Tekrar_Soru;
+
+    Limit_Yeterli_mi -> Bakiye_Yeterli_mi [label="EVET"];
+    Limit_Yeterli_mi -> Limit_Asildi [label="HAYIR"];
+    Limit_Asildi -> Tekrar_Soru;
+
+    Bakiye_Yeterli_mi -> Para_Cek_Guncelle [label="EVET"];
+    Bakiye_Yeterli_mi -> Yetersiz_Bakiye [label="HAYIR"];
+    Yetersiz_Bakiye -> Tekrar_Soru;
+
+    // Başarılı İşlem
+    Para_Cek_Guncelle -> Para_Ver;
+    Para_Ver -> Tekrar_Soru;
+
+    // İşlem Tekrarı Kontrolü
+    Tekrar_Soru -> Tekrar_Cevap;
+
+    Tekrar_Cevap -> Son [label="EVET (H)"]; // 'H' girilirse
+    Tekrar_Cevap -> Tekrar_Et [label="HAYIR (E)"]; // 'E' girilirse
+
+    Iyi_Gunler -> Son;
+}
