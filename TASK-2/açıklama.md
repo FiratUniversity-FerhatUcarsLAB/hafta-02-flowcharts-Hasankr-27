@@ -1,4 +1,4 @@
 İsim-Soy isim: Hasan Kara
-Öğrenci Numarası:250541015
+Öğrenci No:250541015
 sistemin kısa açıklaması (maks. 5-6 satır)
 E-ticaret sisteminde süreç, kullanıcının oturum durumu (kayıtlı veya misafir) belirlenip ilgili sepetin yüklenmesiyle başlar. Kullanıcı ürün eklerken, sistem anlık stok ve fiyat kontrolü yaparak yeterliliği doğrular. Ödeme aşamasına geçildiğinde, varsa indirim kodları uygulanır, teslimat adresi alınır ve seçilen kargo yöntemine göre kesin kargo ücreti hesaplanarak son tutar belirlenir. Ardından seçilen ödeme yöntemine (genellikle Sanal POS) yönlendirme yapılır; kredi kartı işlemleri 3D Secure gibi güvenlik adımlarıyla onaylanır. Ödemenin bankadan başarıyla dönmesiyle birlikte sipariş kesinleşir, satın alınan ürünler anlık olarak stoktan düşülür ve kullanıcıya sipariş onayı gönderilir. Başarısızlık durumunda ise kullanıcıya hata bilgisi iletilerek yeniden deneme imkanı tanınır.
