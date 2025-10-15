@@ -1,0 +1,96 @@
+digraph E_TICARET_FLOW_SADELINMIS {
+    // Grafik Ayarları
+    rankdir=TB;
+    node [shape=box, style="filled", fillcolor="#EEEEEE"];
+    
+    // Node Gruplaması (Subgraphs) ile düzenleme
+    subgraph cluster_1 {
+        label = "I. KULLANICI/SEPET YÖNETİMİ VE ÜRÜN EKLEME";
+        style = "rounded";
+        color = "#336699";
+        
+        N0 [shape=oval, label="BAŞLA", fillcolor="#CCFFCC"];
+        N1 [label="Kullanıcı Oturumu Kontrol Et"];
+        N2 [shape=diamond, label="Kayıtlı Kullanıcı Mı?"];
+        N3A [label="Sepetleri Birleştir (Kayıtlı + Misafir)"];
+        N3B [label="Misafir Sepetini Başlat"];
+        N4 [label="Ürün Ekleme (Stok Kontrolü İle)"];
+        N5 [shape=diamond, label="Eklenen Adet > Stok?"];
+        N6 [label="Stok Uyarısı Göster"];
+        N7 [label="Ürünü Sepete Ekle"];
+        N8 [shape=diamond, label="Alışverişe Devam Mı?"];
+        
+        // Sepet Akışı Bağlantıları
+        N0 -> N1;
+        N1 -> N2;
+        N2 -> N3A [label="EVET"];
+        N2 -> N3B [label="HAYIR"];
+        N3A -> N4;
+        N3B -> N4;
+        N4 -> N5;
+        N5 -> N6 [label="EVET"];
+        N5 -> N7 [label="HAYIR"];
+        N6 -> N8;
+        N7 -> N8;
+    }
+
+    subgraph cluster_2 {
+        label = "II. ÖDEME ÖNCESİ HESAPLAMALAR";
+        style = "rounded";
+        color = "#FFCC66";
+        
+        N9 [label="Sepet Ürünlerini Doğrula ve Ara Toplamı Hesapla"];
+        N10 [shape=diamond, label="İndirim Kodu Var Mı?"];
+        N11A [label="İndirimi Hesapla"];
+        N11B [label="Misafir İse Kişisel Bilgi Al"];
+        N12 [label="Teslimat Adresini/Kargo Yöntemini Al"];
+        N13 [label="Kesin Kargo Ücretini Hesapla (SON_TUTAR)"];
+        
+        // Hesaplamalar Akışı Bağlantıları
+        N8 -> N9 [label="HAYIR"]; // Döngüden çıkış
+        N8 -> N4 [label="EVET"]; // Döngü
+        N9 -> N10;
+        N10 -> N11A [label="EVET"];
+        N10 -> N11B [label="HAYIR"];
+        N11A -> N11B;
+        N11B -> N12;
+        N12 -> N13;
+    }
+
+    subgraph cluster_3 {
+        label = "III. ÖDEME VE ONAY";
+        style = "rounded";
+        color = "#FF9999";
+        
+        N14 [label="Ödeme Yöntemini Seç"];
+        N15 [shape=diamond, label="Kredi Kartı Mı?"];
+        N16A [label="Sanal POS İşlemi Başlat"];
+        N16B [label="Havale/EFT Bilgilerini Göster"];
+        N17 [shape=diamond, label="3D Secure Gerekli Mi?"];
+        N18 [label="3D Secure Onayını Tamamla"];
+        N19 [shape=diamond, label="Ödeme Başarılı Mı?"];
+        N20A [label="Sipariş Onayı, STOK DÜŞÜMÜ, Bildirim Gönder"];
+        N20B [label="Ödeme Hata Mesajı Gönder"];
+        
+        // Ödeme Akışı Bağlantıları
+        N13 -> N14;
+        N14 -> N15;
+        N15 -> N16A [label="EVET"];
+        N15 -> N16B [label="HAYIR"];
+        N16A -> N17;
+        N17 -> N18 [label="EVET"];
+        N17 -> N19 [label="HAYIR"];
+        N18 -> N19;
+        
+        // Sonuç Akışı
+        N19 -> N20A [label="EVET"];
+        N19 -> N20B [label="HAYIR"];
+    }
+    
+    N21 [shape=oval, label="BİTİR", fillcolor="#FFCCCC"];
+
+    // Bitiş Bağlantıları
+    N20A -> N21;
+    N20B -> N21;
+    N16B -> N21 [label="ÇIKIŞ"]; // Havale/EFT sonrası sipariş beklemede kalır ve akış sonlanır.
+}
