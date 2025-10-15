@@ -104,4 +104,4 @@ BAŞLA
 
 SON
 
-https://g.co/gemini/share/2a9f1027bb93
+
