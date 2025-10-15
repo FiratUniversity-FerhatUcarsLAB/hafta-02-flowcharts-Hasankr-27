@@ -126,4 +126,4 @@ PROSEDÜR UniversiteDersKayitSistemi()
   
 SON PROSEDÜR
 
-https://g.co/gemini/share/412d2ef4be62
+
