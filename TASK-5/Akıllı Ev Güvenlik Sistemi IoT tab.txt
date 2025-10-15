@@ -1,0 +1,62 @@
+Akıllı Ev G¨uvenlik Sistemi IoT tabanlı akıllı ev g¨uvenlik sisteminin alarm ve bildirim s¨ure¸clerini
+
+modelleyin.
+
+Sistem Gereksinimleri:
+
+Sistem aktif mi kontrol¨u (ko¸sul)
+
+Sens¨or okuma d¨ong¨us¨u (d¨ong¨u - s¨urekli)
+
+Hareket sens¨or¨u kontrol¨u (ko¸sul)
+
+Kapı/pencere sens¨or¨u kontrol¨u (ko¸sul)
+
+Kamera aktivasyonu (ko¸sul)
+
+Yanlı¸s alarm kontrol¨u (ev sahibi evde mi?) (ko¸sul)
+
+Alarm seviyesi belirleme (1-d¨u¸s¨uk, 2-orta, 3-y¨uksek) (ko¸sul)
+
+Bildirim g¨onderme (SMS + App + Email)
+
+Bekle ve tekrar kontrol et (d¨ong¨u)
+
+Alarm sıfırlama veya devam ettirme (ko¸sul)  S¨urekli C¸ alı¸san Sistemler ˙I¸cin:
+
+Sonsuz D¨ong¨u Yakla¸sımı
+
+“Akıllı ev g¨uvenlik sistemi 7/24 ¸calı¸sır. Ana d¨ong¨u i¸cinde sens¨or okuma,
+
+tehdit algılama, alarm verme ve bildirim g¨onderme s¨ure¸clerini i¸ceren
+
+pseudocode yaz.”
+
+Ozel Notlar: ¨
+
+Ana DONG ¨ U s¨urekli ¸calı¸sır (DO ¨ GRU ko¸sulu ile) ˘
+
+Her d¨ong¨u iterasyonunda t¨um sens¨orler kontrol edilir
+
+Tehdit seviyesine g¨ore farklı aksiyonlar alınır
+
+Alarm sıfırlama komutu gelene kadar devam eder
+
+DOT’ta Sonsuz D¨ong¨u
+
+DOT dilinde sonsuz d¨ong¨uy¨u g¨ostermek i¸cin geri ok kullanın ve ”S¨urekli”
+
+etiketi ekleyin. 
+
+
+
+Harika bir modelleme talebi! IoT tabanlı akıllı ev güvenlik sistemlerinin mantığını anlamak için hem Sözde Kod (Pseudocode) hem de DOT Diyagramı idealdir. Bu sistemin 7/24 kesintisiz çalışmasını sağlayacak mantıksal akışı ve döngü yapılarını aşağıda sizin için modelledim.
+
+İşte istenen gereksinimleri karşılayan sözde kod ve akış diyagramı (DOT) dosyaları.
+
+Akıllı Ev Güvenlik Sistemi Modellemesi
+1. Sözde Kod (Pseudocode)
+Bu dosya, sistemin sürekli çalışan ana döngüsünü ve tehdit seviyelerine göre alınan aksiyonları detaylıca gösterir.
+2. Akış Diyagramı (DOT Dili)
+İşte sistemin sürekli çalışma mantığını ve karar noktalarını gösteren DOT dili ile yazılmış akış diyagramı kodu. Sonsuz döngü için istenen geri ok ve "Sürekli" etiketi kullanılmıştır.
+Bu iki çıktı, sistemin hem kodlama mantığını hem de görsel akışını net bir şekilde ortaya koymaktadır. Bu taslakla devam etmek ister misiniz, yoksa belirli bir senaryoyu detaylandırmamı ister misiniz?
