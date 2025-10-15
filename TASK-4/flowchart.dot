@@ -1,0 +1,89 @@
+digraph BirlesikDersKayitSistemi {
+    // Grafik ayarları
+    rankdir=TB;
+    node [fontname="Helvetica", fontsize=10, style="rounded,filled", fillcolor="#EFEFEF"];
+    edge [fontname="Helvetica", fontsize=9];
+
+    // --- Başlangıç ve Bitiş ---
+    start_node [label="Başla", shape=ellipse, style=filled, fillcolor="#A8E6CF"];
+    end_node [label="Bitiş", shape=ellipse, style=filled, fillcolor="#FFAAA5"];
+
+    // --- 1. Giriş Aşaması ---
+    subgraph cluster_01_Giris {
+        label = "1. Giriş Aşaması";
+        style=filled;
+        color=lightgrey;
+        node [style="rounded,filled"];
+
+        giris [label="Öğrenci Girişi"];
+        giris_kontrol [shape=diamond, fillcolor="#87CEEB", label="Giriş Başarılı mı?"];
+        hatali_giris [label="Hatalı Giriş", fillcolor="#FFCCCB"];
+    }
+
+    // --- 2. Ders İşlemleri Döngüsü ---
+    subgraph cluster_02_Islemler {
+        label = "2. Ders İşlemleri Döngüsü";
+        style=filled;
+        color=lightgrey;
+        node [style="rounded,filled"];
+
+        ana_menu [label="Ana Menü\n(Ders Ekle/Çıkar/Bitir)"];
+        ders_ekleme_kontrol [shape=diamond, fillcolor="#87CEEB", label="Ders Ekleme Kontrolleri\n(Kredi, Kontenjan, Koşul, Çakışma)"];
+        ders_eklendi [label="Ders Başarıyla Eklendi", fillcolor="#D4EDDA"];
+        hata_goster [label="Hata Mesajı Göster", fillcolor="#FFCCCB"];
+        ders_cikar [label="Seçilen Dersi Çıkar"];
+    }
+    
+    // --- 3. Kayıt Onay Aşaması (Detaylı ve Anlaşılır Versiyon) ---
+    subgraph cluster_03_Onay {
+        label = "3. Kayıt Onay Aşaması";
+        style=filled;
+        color=lightgrey;
+        node [style="rounded,filled"];
+
+        kayit_ozeti_hazirla [label="1. Kayıt Özeti Hazırlanır"];
+        danisman_kontrolu [shape=diamond, fillcolor="#87CEEB", label="2. GPA < 2.5 mi?"];
+        onay_gerekli_mesaji [label="3a. Özete 'Danışman Onayı Gerekli' Mesajı Eklenir", fillcolor="#FFDDC1"];
+        dogrudan_onay_mesaji [label="3b. Özete 'Doğrudan Onaylanacak' Mesajı Eklenir", fillcolor="#D4EDDA"];
+        ozeti_goster [label="4. Ders Özeti ve Onay Durumu Öğrenciye Gösterilir"];
+        son_kullanici_onayi [shape=diamond, fillcolor="#87CEEB", label="5. Kullanıcı Onaylıyor mu?"];
+        kaydi_tamamla [label="6a. Kayıt Veritabanına İşlenir", fillcolor="#D4EDDA"];
+        kayit_iptal [label="6b. İşlem İptal Edilir", fillcolor="#FFCCCB"];
+    }
+
+
+    // --- BÖLÜMLER ARASI AKIŞ BAĞLANTILARI ---
+    
+    // Giriş Akışı
+    start_node -> giris;
+    giris -> giris_kontrol;
+    giris_kontrol -> ana_menu [label=" Evet "];
+    giris_kontrol -> hatali_giris [label=" Hayır "];
+    hatali_giris -> end_node;
+
+    // Menü Seçimleri Akışı
+    ana_menu -> ders_ekleme_kontrol [label=" 'Ders Ekle' Seçildi"];
+    ana_menu -> ders_cikar [label=" 'Ders Çıkar' Seçildi"];
+    
+    // Ders Ekleme ve Çıkarma Akışı (Döngü)
+    ders_ekleme_kontrol -> ders_eklendi [label=" Başarılı "];
+    ders_ekleme_kontrol -> hata_goster [label=" Başarısız "];
+    ders_eklendi -> ana_menu [label="Menüye Dön"];
+    hata_goster -> ana_menu [label="Menüye Dön"];
+    ders_cikar -> ana_menu [label="Menüye Dön"];
+    
+    // Kayıt Tamamlama Akışı (Döngüden Çıkış)
+    ana_menu -> kayit_ozeti_hazirla [label=" 'Kaydı Bitir' Seçildi"];
+    kayit_ozeti_hazirla -> danisman_kontrolu;
+    danisman_kontrolu -> onay_gerekli_mesaji [label=" Evet "];
+    danisman_kontrolu -> dogrudan_onay_mesaji [label=" Hayır "];
+    onay_gerekli_mesaji -> ozeti_goster;
+    dogrudan_onay_mesaji -> ozeti_goster;
+    ozeti_goster -> son_kullanici_onayi;
+    son_kullanici_onayi -> kaydi_tamamla [label=" Evet "];
+    son_kullanici_onayi -> kayit_iptal [label=" Hayır "];
+    
+    // Bitiş Bağlantıları
+    kaydi_tamamla -> end_node;
+    kayit_iptal -> end_node;
+}
