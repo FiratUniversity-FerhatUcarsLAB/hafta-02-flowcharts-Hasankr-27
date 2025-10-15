@@ -1,3 +1,4 @@
-
-
+İsim-Soy isim: Hasan Kara
+Öğrenci No:250541015
 sistemin kısa açıklaması (maks. 5-6 satır)
+Bu birleşik hastane yönetim sistemi, kullanıcılara randevu alma ve tahlil sonuçlarını görüntüleme olmak üzere iki temel işlevi tek bir platformda sunar. Sistem, kullanıcı kimlik doğrulaması ile başlar ve başarılı girişin ardından kullanıcıyı Ana Menü'ye yönlendirir. Randevu İşlemleri Modülü altında, hasta sırasıyla hastane, poliklinik ve doktor seçimi yapar, ardından uygun tarih ve saatleri görüntüleyerek randevusunu onaylar ve bir SMS bildirimi alır. Tahlil Sonuçları Modülü ise hastanın geçmiş tahlil isteklerini listeler; seçilen tahlilin sonucunun hazır ve onaylı olup olmadığını kontrol eder. Eğer sonuçlar onaylanmışsa hasta verileri ekranda görüntüler ve isteğe bağlı olarak tahlil sonucunu PDF formatında indirme imkanı sunar. Her iki modül de işlemler tamamlandıktan sonra kullanıcıyı Ana Menü'ye geri döndürerek sistem içinde kolay gezinme sağlar.
