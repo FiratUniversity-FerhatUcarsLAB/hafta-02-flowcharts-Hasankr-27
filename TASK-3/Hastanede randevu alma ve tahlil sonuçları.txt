@@ -1,0 +1,54 @@
+Hastanede randevu alma ve tahlil sonu¸clarına eri¸sim sistemini modelleyin
+
+
+Elbette, bir hastanede randevu alma ve tahlil sonuçlarına erişim sistemini modelleyebiliriz. Bu tür bir sistemi modellemek için genellikle Kullanım Durumu Diyagramı (Use Case Diagram), Sınıf Diyagramı (Class Diagram) ve Etkileşim Diyagramları (Interaction Diagrams - Sıralı Diyagram veya İşbirliği Diyagramı) gibi UML (Birleşik Modelleme Dili) öğeleri kullanılır.
+
+Burada, temel bir Kullanım Durumu Diyagramı ile sistemin ana işlevlerini ve bu işlevlerle etkileşen kullanıcıları (aktörleri) listeleyerek başlayabiliriz.
+randevu al kısmı için “Hastane randevu sistemi i¸cin algoritma: kimlik do˘grulama, poliklinik
+
+se¸cimi, doktor listesi g¨or¨unt¨uleme, uygun saatleri g¨osterme, randevu
+
+onaylama ve SMS g¨onderme. Pseudocode yaz
+
+
+
+Harika bir istek. Hastane randevu sistemi için randevu alma sürecini kapsayan bir pseudocode (sözde kod) yazalım. Bu pseudocode, belirtilen adımları (kimlik doğrulama, poliklinik seçimi, doktor listesi, uygun saatler, onay ve SMS) temel alacaktır.
+poliklinikten önce hastane olması gerekmiyor mu
+
+
+Haklısınız, çok yerinde bir gözlem! Türkiye'deki merkezi randevu sistemlerinde (örneğin MHRS'de) ve genellikle büyük kurumsal hastane sistemlerinde, hasta genellikle önce hangi hastaneden randevu almak istediğini seçer, ardından o hastanedeki poliklinikleri (klinikleri) görür.
+
+Önceki pseudocode'da hastane seçimi adımı atlanmıştı. Algoritmayı, bu önemli adımı içerecek şekilde güncelleyelim.
+peki şimdi 2. algoritmamız var “Tahlil sonucu g¨or¨unt¨uleme sistemi: kimlik do˘grulama, tahlil varlı˘gı
+
+kontrol¨u, sonu¸c hazır mı kontrol¨u, g¨or¨unt¨uleme veya bekleme mesajı, PDF
+
+indirme. Pseudocode yaz
+
+
+
+Harika. Şimdi de hastaların Tahlil Sonuçlarını Görüntüleme Sistemi için bir algoritma (pseudocode) yazalım.
+
+Bu algoritma, kimlik doğrulama sonrasında hastaya ait tahlil sonuçlarının varlığını, hazır olup olmadığını kontrol edecek ve sonucu gösterecek ya da bekleme mesajı verecektir.
+ikisini birleştirir misin
+
+
+Elbette, randevu alma ve tahlil sonuçlarını görüntüleme sistemlerini tek bir ana sistem altında birleştirerek birleşik bir pseudocode yazalım.
+
+Bu birleşik sistemde, kullanıcı giriş yaptıktan sonra ana menüde Randevu İşlemleri ve Tahlil Sonuçları olmak üzere iki ana seçenek görecektir.
+DOT kodunda her mod¨ul¨u ayrı subgraph olarak çıkartır mısın
+
+
+Elbette, bir önceki birleşik sistem pseudocode'unu temel alarak, her bir ana modülü (Randevu İşlemleri ve Tahlil Sonuçları) ayrı bir subgraph olarak gösteren bir DOT (Graphviz) kodu oluşturabiliriz.
+
+Bu diyagram, sistemin yüksek seviyeli yapısını, modüller arasındaki geçişleri ve her modül içindeki temel adımları görselleştirecektir.
+DOT Kodunun Açıklaması
+Bu DOT kodu, sistemi üç ana kısma ayırır:
+
+Genel Akış (Dış Alan): Kimlik doğrulama (H1) ve ana menüye (M0) yönlendirme adımlarını içerir.
+
+Randevu İşlemleri Modülü (cluster_randevu): Randevu alma sürecindeki adımları (Hastane Seçimi'nden SMS Gönderimine) kapsayan, ayrı bir çerçeve içine alınmış modüldür.
+
+Tahlil Sonuçları Modülü (cluster_tahlil): Tahlil listeleme, durum kontrolü (onaylı/beklemede) ve PDF indirme adımlarını içeren, ayrı bir çerçeve içine alınmış modüldür.
+
+Bu yapıyı bir Graphviz aracı (örneğin online bir Graphviz editörü) ile görselleştirdiğinizde, modüler ve anlaşılır bir sistem diyagramı elde edersiniz.
