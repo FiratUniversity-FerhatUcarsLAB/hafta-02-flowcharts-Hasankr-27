@@ -1,0 +1,77 @@
+digraph HastaneYonetimSistemi {
+    // Grafiğin genel ayarları
+    rankdir=LR; // Soldan sağa düzen
+    node [shape=box, style="filled", fillcolor="#ECECEC", fontname="Arial"];
+    
+    // Aktör (Başlangıç noktası)
+    H0 [label="SİSTEM BAŞLANGICI (Giriş Ekranı)", shape=Mdiamond, fillcolor="#FFD700"];
+    H1 [label="Kullanıcı Kimlik Doğrulama", fillcolor="#ADD8E6"];
+
+    // Ana Menü
+    M0 [label="ANA MENÜ\n(Seçim 1: Randevu, Seçim 2: Tahlil)", fillcolor="#90EE90", shape=doublecircle];
+    
+    // ===========================================
+    // Subgraph 1: Randevu İşlemleri Modülü
+    // ===========================================
+    subgraph cluster_randevu {
+        label = "Randevu İşlemleri Modülü";
+        color = "#4682B4";
+        style = "rounded, filled";
+        fillcolor = "#F0F8FF";
+
+        R1 [label="Hastane Seçimi"];
+        R2 [label="Poliklinik Seçimi (HastaneID ile)"];
+        R3 [label="Doktor Seçimi (Poliklinik/Hastane ID ile)"];
+        R4 [label="Uygun Tarih/Saatleri Bulma"];
+        R5 [label="Randevu Onayı ve Kayıt", fillcolor="#FFA07A"];
+        R6 [label="SMS Gönderme ve Bildirim", shape=note, fillcolor="#F0E68C"];
+        R7 [label="Randevu Başarısız", fillcolor="#F08080"];
+        
+        // Randevu Akışı
+        R1 -> R2;
+        R2 -> R3;
+        R3 -> R4;
+        R4 -> R5 [label="Uygun Slot Var"];
+        R4 -> R7 [label="Uygun Slot Yok"];
+        R5 -> R6;
+        R6 -> M0 [label="Ana Menüye Dön"];
+        R7 -> M0 [label="Ana Menüye Dön"];
+    }
+
+    // ===========================================
+    // Subgraph 2: Tahlil Sonuçları Modülü
+    // ===========================================
+    subgraph cluster_tahlil {
+        label = "Tahlil Sonuçları Modülü";
+        color = "#8A2BE2";
+        style = "rounded, filled";
+        fillcolor = "#F8F8FF";
+
+        T1 [label="Tahlil İsteklerini Listele (HastaID ile)"];
+        T2 [label="Tahlil Seçimi ve Durum Kontrolü"];
+        T3_H [label="Sonuç Hazır ve Onaylı", fillcolor="#98FB98"];
+        T3_B [label="Onay Beklemede/İşlemde", fillcolor="#FFDEAD"];
+        T4 [label="Sonucu Görüntüle"];
+        T5 [label="PDF Oluştur ve İndir", shape=folder, fillcolor="#B0E0E6"];
+
+        // Tahlil Akışı
+        T1 -> T2;
+        T2 -> T3_H [label="HAZIR_VE_ONAYLI"];
+        T2 -> T3_B [label="BEKLEMEDE/İŞLEMDE"];
+        T3_H -> T4;
+        T4 -> T5 [label="PDF İsteği"];
+        T4 -> M0 [label="Ana Menüye Dön (Görüntülendi)"];
+        T5 -> M0 [label="Ana Menüye Dön"];
+        T3_B -> M0 [label="Ana Menüye Dön (Mesaj Verildi)"];
+    }
+
+    // ===========================================
+    // Genel Akış Bağlantıları
+    // ===========================================
+    H0 -> H1;
+    H1 -> M0 [label="Başarılı Doğrulama"];
+    
+    // Ana Menü'den Modüllere Geçiş
+    M0 -> R1 [label="Seçim: Randevu"];
+    M0 -> T1 [label="Seçim: Tahlil Sonucu"];
+}
