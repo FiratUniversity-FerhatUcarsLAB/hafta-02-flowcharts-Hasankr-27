@@ -103,3 +103,5 @@ BAŞLA
     YAZ "İyi günler dileriz. İşlem sonlandı."
 
 SON
+
+https://g.co/gemini/share/2a9f1027bb93
